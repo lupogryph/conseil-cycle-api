@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { MeetingModule } from './meeting/meeting.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { User } from './user/entities/user.entity';
       entities: [User],
       synchronize: Boolean(process.env.DATABASE_SYNC) || false,
     }),
+    MeetingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
