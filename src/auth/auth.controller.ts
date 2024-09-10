@@ -12,7 +12,7 @@ export class AuthController {
     return this.authService.connecter(body.email, body.password);
   }
 
-  @Get('profile')
+  @Get()
   getProfile(@Request() req) {
     return req.user;
   }
