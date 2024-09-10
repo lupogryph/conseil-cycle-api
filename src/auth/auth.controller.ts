@@ -9,7 +9,7 @@ export class AuthController {
   @Public()
   @Post()
   connecter(@Body() body: Record<string, any>) {
-    return this.authService.connecter(body.pseudo, body.password);
+    return this.authService.connecter(body.email, body.password);
   }
 
   @Get('profile')
