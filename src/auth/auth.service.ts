@@ -1,20 +1,23 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as crypto from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
     private jwtService: JwtService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async connecter(
     email: string,
     password: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userRepository.findOneBy({ email: email });
     if (user == null) throw new UnauthorizedException();
     const db_hash = Buffer.from(user.password, 'hex');
     const hash = crypto.scryptSync(password, process.env.SALT, 12);
