@@ -10,7 +10,7 @@ export class Meeting {
   date: Date;
 
   @Column()
-  lieu: string;
+  location: string;
 
   @ManyToOne(() => User, (user) => user.id)
   createdBy: User;
