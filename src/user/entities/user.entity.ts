@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Role } from 'src/auth/roles.enum';
 
 @Entity('user')
 @Unique(['email'])
@@ -22,10 +23,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: ['ADMIN', 'OPERATOR', 'INVITE'],
-    default: 'INVITE',
+    enum: Role,
+    default: Role.USER,
   })
-  role: 'ADMIN' | 'OPERATOR' | 'INVITE';
+  role: Role;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
