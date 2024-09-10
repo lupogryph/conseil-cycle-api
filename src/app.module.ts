@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { MeetingModule } from './meeting/meeting.module';
+import { Meeting } from './meeting/entities/meeting.entity';
 
 @Module({
   imports: [
-    UserModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mariadb',
@@ -18,12 +17,14 @@ import { MeetingModule } from './meeting/meeting.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User],
+      entities: [User, Meeting],
       synchronize: Boolean(process.env.DATABASE_SYNC) || false,
     }),
+    AuthModule,
+    UserModule,
     MeetingModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

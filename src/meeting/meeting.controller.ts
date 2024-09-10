@@ -20,11 +20,6 @@ export class MeetingController {
     return this.meetingService.create(createMeetingDto);
   }
 
-  @Get()
-  findAll() {
-    return this.meetingService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.meetingService.findOne(+id);
