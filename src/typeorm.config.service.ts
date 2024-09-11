@@ -4,20 +4,28 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { Meeting } from './meeting/entities/meeting.entity';
 
+interface DatabaseConfig {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+  synchronize: boolean;
+}
+
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  databaseConfig: DatabaseConfig;
+
+  constructor(private configService: ConfigService) {
+    this.databaseConfig = configService.get<DatabaseConfig>('database');
+  }
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
+      ...this.databaseConfig,
       type: 'mariadb',
-      host: this.configService.get<string>('database.host'),
-      port: this.configService.get<number>('database.port'),
-      username: this.configService.get<string>('database.username'),
-      password: this.configService.get<string>('database.password'),
-      database: this.configService.get<string>('database.database'),
       entities: [User, Meeting],
-      synchronize: this.configService.get<boolean>('database.synchronize'),
     };
   }
 }

@@ -5,13 +5,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as crypto from 'node:crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
+  salt: string;
+
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.salt = this.configService.get<string>('jwt.salt');
+  }
 
   create(createUserDto: CreateUserDto) {
     createUserDto.password = this.hashPassword(createUserDto.password);
@@ -20,7 +26,7 @@ export class UserService {
   }
 
   hashPassword(password: string) {
-    const hash = crypto.scryptSync(password, process.env.JWT_SALT, 12);
+    const hash = crypto.scryptSync(password, this.salt, 24);
     if (hash == null) {
       throw new InternalServerErrorException();
     }
