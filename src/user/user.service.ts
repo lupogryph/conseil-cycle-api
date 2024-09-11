@@ -1,27 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import * as crypto from 'node:crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
+  salt: string;
+
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.salt = this.configService.get<string>('jwt.salt');
+  }
 
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    createUserDto.password = this.hashPassword(createUserDto.password);
+    const user = this.repository.create(createUserDto);
+    return this.repository.save(user);
+  }
+
+  hashPassword(password: string) {
+    const hash = crypto.scryptSync(password, this.salt, 24);
+    if (hash == null) {
+      throw new InternalServerErrorException();
+    }
+    return hash.toString('hex');
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findById(id: number) {
+    return this.repository.findOneBy({ id: id });
   }
 
   findByEmail(email: string) {
@@ -29,10 +46,13 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    if (updateUserDto.password != null) {
+      updateUserDto.password = this.hashPassword(updateUserDto.password);
+    }
+    return this.repository.update(id, updateUserDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.repository.delete(id);
   }
 }
