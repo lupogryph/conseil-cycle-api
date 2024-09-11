@@ -23,7 +23,7 @@ export class AuthService {
     if (user == null) throw new UnauthorizedException();
     const db_hash = Buffer.from(user.password, 'hex');
     const salt = this.configService.get<string>('jwt.salt');
-    const hash = crypto.scryptSync(password, salt, 12);
+    const hash = crypto.scryptSync(password, salt, 24);
     if (crypto.timingSafeEqual(db_hash, hash)) {
       return {
         access_token: await this.jwtService.signAsync({
