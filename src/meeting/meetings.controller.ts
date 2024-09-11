@@ -10,10 +10,10 @@ export class MeetingsController {
     return this.meetingService.findAll();
   }
 
-  @Get(':begin-date/:end-date')
+  @Get(':beginDate/:endDate')
   findAllAfterDate(
-    @Param('begin-date') beginDate: string,
-    @Param('end-date') endDate: string,
+    @Param('beginDate') beginDate: string,
+    @Param('endDate') endDate: string,
   ) {
     return this.meetingService.findAll();
   }

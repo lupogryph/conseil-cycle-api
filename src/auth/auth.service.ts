@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private configService: ConfigService,
   ) {}
 
   async connecter(
@@ -20,7 +22,8 @@ export class AuthService {
     const user = await this.userRepository.findOneBy({ email: email });
     if (user == null) throw new UnauthorizedException();
     const db_hash = Buffer.from(user.password, 'hex');
-    const hash = crypto.scryptSync(password, process.env.SALT, 12);
+    const salt = this.configService.get<string>('jwt.salt');
+    const hash = crypto.scryptSync(password, salt, 12);
     if (crypto.timingSafeEqual(db_hash, hash)) {
       return {
         access_token: await this.jwtService.signAsync({
