@@ -1,8 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { MeetingService } from './meeting.service';
 
 @Controller('meetings')
@@ -15,8 +11,10 @@ export class MeetingsController {
   }
 
   @Get(':begin-date/:end-date')
-  findAllAfterDate(@Param('begin-date') beginDate: string, @Param('end-date') endDate: string) {
+  findAllAfterDate(
+    @Param('begin-date') beginDate: string,
+    @Param('end-date') endDate: string,
+  ) {
     return this.meetingService.findAll();
   }
-
 }
