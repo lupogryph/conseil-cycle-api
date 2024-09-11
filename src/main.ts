@@ -22,7 +22,6 @@ async function bootstrap() {
     .setTitle('Conseil de Cycle')
     .setDescription('API')
     .setVersion('1.0')
-    .addTag('cdc')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

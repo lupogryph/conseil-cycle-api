@@ -4,7 +4,7 @@ import { UpdateMeetingDto } from './dto/update-meeting.dto';
 
 @Injectable()
 export class MeetingService {
-  create(createMeetingDto: CreateMeetingDto) {
+  create(userId: number, createMeetingDto: CreateMeetingDto) {
     return 'This action adds a new meeting';
   }
 
@@ -16,7 +16,7 @@ export class MeetingService {
     return `This action returns a #${id} meeting`;
   }
 
-  update(id: number, updateMeetingDto: UpdateMeetingDto) {
+  update(userId: number, id: number, updateMeetingDto: UpdateMeetingDto) {
     return `This action updates a #${id} meeting`;
   }
 
