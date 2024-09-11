@@ -26,7 +26,22 @@ export class UserController {
   @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
+    delete createUserDto.role;
     return this.userService.create(createUserDto);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.USER)
+  @Post()
+  createAdmin(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.USER)
+  @Get()
+  findMe(@Request() req) {
+    return this.userService.findById(req.user.sub);
   }
 
   @UseGuards(RolesGuard)
@@ -40,7 +55,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.userService.findById(+id);
+    return this.userService.findById(id);
   }
 
   @UseGuards(RolesGuard)
@@ -55,7 +70,6 @@ export class UserController {
   @Roles(Role.ADMIN)
   @Patch(':id')
   updateAdmin(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    delete updateUserDto.role;
     return this.userService.update(id, updateUserDto);
   }
 
