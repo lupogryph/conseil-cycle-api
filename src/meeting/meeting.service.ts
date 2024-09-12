@@ -29,7 +29,7 @@ export class MeetingService {
     return this.repository.findOneBy({ id: id });
   }
 
-  findBetweenDates(from: Date, to: Date) {
+  findBetween(from: Date, to: Date) {
     return this.repository.findBy({ date: Between(from, to) });
   }
 
