@@ -2,7 +2,8 @@ import { Body, Request, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
 import { Auth } from './dto/auth.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { TokenDto } from './dto/token.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -10,6 +11,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOkResponse({ type: TokenDto })
   @Public()
   @Post()
   connecter(@Body() auth: Auth) {
