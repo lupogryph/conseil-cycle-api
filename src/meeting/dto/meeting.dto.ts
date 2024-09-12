@@ -1,24 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate } from 'class-validator';
+import { IsDate, IsOptional } from 'class-validator';
 import { UserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/entities/user.entity';
 
 export class MeetingDto {
-  @ApiProperty()
-  id: number;
+  @ApiPropertyOptional()
+  id?: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsDate()
   @Type(() => Date)
-  date: Date;
+  date?: Date;
 
-  @ApiProperty()
-  location: string;
+  @ApiPropertyOptional()
+  location?: string;
 
-  @ApiProperty()
-  createdBy: UserDto;
+  @ApiPropertyOptional()
+  createdBy?: UserDto;
 
-  @ApiProperty()
-  updatedBy: UserDto;
+  @ApiPropertyOptional()
+  updatedBy?: UserDto;
 }

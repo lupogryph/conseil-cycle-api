@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Meeting } from './entities/meeting.entity';
 import { Between, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
+import { Role } from 'src/auth/roles.enum';
 
 @Injectable()
 export class MeetingService {
@@ -21,16 +22,19 @@ export class MeetingService {
     return this.repository.save(meeting);
   }
 
-  findAll() {
-    return this.repository.find({ order: { date: 'ASC' } });
+  findAll(role: Role) {
+    const joins = role == Role.ADMIN;
+    return this.repository.find({ order: { date: 'ASC' }, relations: { createdBy: joins, updatedBy: joins } });
   }
 
-  findOne(id: number) {
-    return this.repository.findOneBy({ id: id });
+  findOne(role: Role, id: number) {
+    const joins = role == Role.ADMIN;
+    return this.repository.findOne({ where: {id: id }, relations: { createdBy: joins, updatedBy: joins }});
   }
 
-  findBetween(from: Date, to: Date) {
-    return this.repository.findBy({ date: Between(from, to) });
+  findBetween(role: Role, from: Date, to: Date) {
+    const joins = role == Role.ADMIN;
+    return this.repository.find({ where: {date: Between(from, to)}, relations: { createdBy: joins, updatedBy: joins } });
   }
 
   async update(userId: number, id: number, updateMeetingDto: UpdateMeetingDto) {

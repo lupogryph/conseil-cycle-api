@@ -25,8 +25,8 @@ export class MeetingController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.meetingService.findOne(id);
+  findOne(@Request() req, @Param('id') id: number) {
+    return this.meetingService.findOne(req.user.role, id);
   }
 
   @Patch(':id')
