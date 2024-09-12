@@ -13,11 +13,8 @@ export class MeetingsController {
     return this.meetingService.findAll();
   }
 
-  @Get(':beginDate/:endDate')
-  findAllAfterDate(
-    @Param('beginDate') beginDate: string,
-    @Param('endDate') endDate: string,
-  ) {
-    return this.meetingService.findAll();
+  @Get(':from/:to')
+  findAllAfterDate(@Param('from') from: Date, @Param('to') to: Date) {
+    return this.meetingService.findBetweenDates(from, to);
   }
 }

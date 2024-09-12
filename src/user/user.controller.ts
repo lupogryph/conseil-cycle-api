@@ -6,8 +6,6 @@ import {
   Body,
   Patch,
   Delete,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,13 +26,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   find(@Request() req) {
     return this.userService.findById(req.user.sub);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.role;

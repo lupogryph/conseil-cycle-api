@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
 const SERVER_PORT = process.env.PORT || 1337;
 

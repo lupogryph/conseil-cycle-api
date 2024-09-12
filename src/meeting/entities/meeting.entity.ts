@@ -6,7 +6,7 @@ export class Meeting {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'datetime' })
   date: Date;
 
   @Column()
