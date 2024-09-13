@@ -24,17 +24,26 @@ export class MeetingService {
 
   findAll(role: Role) {
     const joins = role == Role.ADMIN;
-    return this.repository.find({ order: { date: 'ASC' }, relations: { createdBy: joins, updatedBy: joins } });
+    return this.repository.find({
+      order: { date: 'ASC' },
+      relations: { createdBy: joins, updatedBy: joins },
+    });
   }
 
   findOne(role: Role, id: number) {
     const joins = role == Role.ADMIN;
-    return this.repository.findOne({ where: {id: id }, relations: { createdBy: joins, updatedBy: joins }});
+    return this.repository.findOne({
+      where: { id: id },
+      relations: { createdBy: joins, updatedBy: joins },
+    });
   }
 
   findBetween(role: Role, from: Date, to: Date) {
     const joins = role == Role.ADMIN;
-    return this.repository.find({ where: {date: Between(from, to)}, relations: { createdBy: joins, updatedBy: joins } });
+    return this.repository.find({
+      where: { date: Between(from, to) },
+      relations: { createdBy: joins, updatedBy: joins },
+    });
   }
 
   async update(userId: number, id: number, updateMeetingDto: UpdateMeetingDto) {

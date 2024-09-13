@@ -8,24 +8,24 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiPropertyOptional()
   @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @MinLength(8)
-  password: string;
+  password?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @MaxLength(20)
-  firstName: string;
+  firstName?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @MaxLength(20)
-  name: string;
+  name?: string;
 
   @ApiPropertyOptional({ name: 'role', enum: Role })
   @IsOptional()
-  role: Role;
+  role?: Role;
 }

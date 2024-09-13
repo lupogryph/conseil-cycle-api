@@ -1,20 +1,20 @@
 import { IsEmail, MaxLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Role } from 'src/auth/roles.enum';
 
 export class UserDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @MaxLength(20)
-  firstName: string;
+  firstName?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @MaxLength(20)
-  name: string;
+  name?: string;
 
-  @ApiProperty({ name: 'role', enum: Role })
-  role: Role;
+  @ApiPropertyOptional({ name: 'role', enum: Role })
+  role?: Role;
 }
