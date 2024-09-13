@@ -35,6 +35,9 @@ export class User {
   })
   role: Role;
 
+  @Column()
+  activated: boolean;
+
   @OneToMany(() => Meeting, (meeting) => meeting.createdBy)
   createdMeetings: Meeting[];
 

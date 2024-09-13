@@ -37,6 +37,7 @@ export class UserController {
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.role;
+    delete updateUserDto.activated;
     return this.userService.update(req.user.sub, updateUserDto);
   }
 

@@ -17,4 +17,7 @@ export class UserDto {
 
   @ApiPropertyOptional({ name: 'role', enum: Role })
   role?: Role;
+
+  @ApiPropertyOptional()
+  activated?: boolean;
 }

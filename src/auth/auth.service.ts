@@ -20,7 +20,7 @@ export class AuthService {
     password: string,
   ): Promise<{ access_token: string }> {
     const user = await this.userRepository.findOneBy({ email: email });
-    if (user == null) throw new UnauthorizedException();
+    if (user == null || !user.activated) throw new UnauthorizedException("Utilisateur non existant ou non activé par l'administrateur");
     const db_hash = Buffer.from(user.password, 'hex');
     const salt = this.configService.get<string>('jwt.salt');
     const hash = crypto.scryptSync(password, salt, 24);
