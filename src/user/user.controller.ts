@@ -6,14 +6,13 @@ import {
   Body,
   Patch,
   Delete,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/public.decorator';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { UserDto } from './dto/user.dto';
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -21,6 +20,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOkResponse({ type: UserDto })
   @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -28,16 +28,16 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: UserDto })
   @Get()
   find(@Request() req) {
     return this.userService.findById(req.user.sub);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.role;
+    delete updateUserDto.activated;
     return this.userService.update(req.user.sub, updateUserDto);
   }
 

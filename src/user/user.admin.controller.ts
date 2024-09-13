@@ -7,8 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +14,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'src/auth/role.decorator';
 import { Role } from 'src/auth/roles.enum';
 import { RolesGuard } from 'src/auth/role.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { UserDto } from './dto/user.dto';
 
 @ApiBearerAuth()
 @ApiTags('admin')
@@ -24,7 +23,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class UserAdminController {
   constructor(private readonly userService: UserService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: UserDto })
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Post()
@@ -32,7 +31,7 @@ export class UserAdminController {
     return this.userService.create(createUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: UserDto, isArray: true })
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
@@ -40,7 +39,7 @@ export class UserAdminController {
     return this.userService.findAll();
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: UserDto })
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Get(':id')

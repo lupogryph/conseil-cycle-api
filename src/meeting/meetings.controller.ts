@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Request } from '@nestjs/common';
 import { MeetingService } from './meeting.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { MeetingDto } from './dto/meeting.dto';
 
 @ApiBearerAuth()
 @ApiTags('meeting')
@@ -8,16 +9,19 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class MeetingsController {
   constructor(private readonly meetingService: MeetingService) {}
 
+  @ApiOkResponse({ type: MeetingDto, isArray: true })
   @Get()
-  findAll() {
-    return this.meetingService.findAll();
+  findAll(@Request() req) {
+    return this.meetingService.findAll(req.user.role);
   }
 
-  @Get(':beginDate/:endDate')
-  findAllAfterDate(
-    @Param('beginDate') beginDate: string,
-    @Param('endDate') endDate: string,
+  @ApiOkResponse({ type: MeetingDto, isArray: true })
+  @Get(':from/:to')
+  findBetween(
+    @Request() req,
+    @Param('from') from: Date,
+    @Param('to') to: Date,
   ) {
-    return this.meetingService.findAll();
+    return this.meetingService.findBetween(req.user.role, from, to);
   }
 }

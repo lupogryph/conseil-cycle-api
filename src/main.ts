@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { MeetingDto } from './meeting/dto/meeting.dto';
 
 const SERVER_PORT = process.env.PORT || 1337;
 
@@ -24,7 +25,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [],
+  });
   SwaggerModule.setup('api', app, document);
 
   await app.listen(SERVER_PORT);
