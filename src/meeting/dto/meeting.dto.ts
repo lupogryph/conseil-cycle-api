@@ -9,7 +9,6 @@ export class MeetingDto {
   id?: number;
 
   @ApiPropertyOptional()
-  @IsDate()
   @Type(() => Date)
   date?: Date;
 
